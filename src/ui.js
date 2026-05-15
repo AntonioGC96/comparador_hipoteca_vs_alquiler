@@ -1,5 +1,11 @@
 import { COST_FIELDS } from "./config.js";
-import { formatInputNumber, formatMoney, formatPercent, parseNumber } from "./format.js";
+import {
+  formatFixedPercent,
+  formatInputNumber,
+  formatMoney,
+  formatPercent,
+  parseNumber
+} from "./format.js";
 import { applyTranslations, t } from "./i18n.js";
 import {
   getAdvancedDefault,
@@ -8,7 +14,7 @@ import {
   getDisplayValue
 } from "./state.js";
 
-export function bindControls(elements, getState, setState, recalculate) {
+export function bindControls(elements, getState, setState, recalculate, refreshDisplay) {
   elements.form.addEventListener("input", (event) => {
     const input = event.target;
     const state = getState();
@@ -106,14 +112,14 @@ export function bindControls(elements, getState, setState, recalculate) {
   elements.languageSelect.addEventListener("change", () => {
     const state = getState();
     setState(state.actions.setLanguage(elements.languageSelect.value));
-    recalculate();
+    refreshDisplay();
   });
 
   elements.viewModeButtons.forEach((button) => {
     button.addEventListener("click", () => {
       const state = getState();
       setState({ ...state, viewMode: button.dataset.viewMode });
-      recalculate();
+      refreshDisplay();
     });
   });
 }
@@ -176,30 +182,34 @@ export function syncControls(elements, state) {
   }
 }
 
-export function renderSummary(container, projection, state) {
+export function renderSummary(container, projection, state, uncertain) {
   if (!projection.ready) {
     container.replaceChildren(summaryItem(t(state.language, "status"), t(state.language, "waitingInputs")));
     return;
   }
 
-  const display = t(state.language, state.viewMode === "real" ? "real" : "nominal");
-  const finalBuyer = applyDisplayMode(projection.points.at(-1), projection.summary.buyerFinal, projection, state);
-  const finalRenter = applyDisplayMode(projection.points.at(-1), projection.summary.renterFinal, projection, state);
-  const betterOption = projection.summary.buyerFinal >= projection.summary.renterFinal
-    ? t(state.language, "buying")
-    : t(state.language, "renting");
+  const display = t(state.language, state.viewMode === "real" ? "realLower" : "nominalLower");
+  const percentileSummary = getPercentileSummary(projection, state, uncertain);
+  const finalBuyer = percentileSummary?.buyer
+    ?? applyDisplayMode(projection.points.at(-1), projection.summary.buyerFinal, projection, state);
+  const finalRenter = percentileSummary?.renter
+    ?? applyDisplayMode(projection.points.at(-1), projection.summary.renterFinal, projection, state);
+  const decision = percentileSummary?.decision
+    ?? (projection.summary.buyerFinal >= projection.summary.renterFinal
+      ? t(state.language, "buying")
+      : t(state.language, "renting"));
 
   container.replaceChildren(
     summaryItem(t(state.language, "monthlyMortgage"), formatMoney(projection.summary.monthlyPayment, state.language)),
     summaryItem(
-      t(state.language, "buyerNetWorth", { mode: display }),
+      t(state.language, percentileSummary ? "buyerPercentileNetWorth" : "buyerNetWorth", { mode: display }),
       formatMoney(finalBuyer, state.language)
     ),
     summaryItem(
-      t(state.language, "renterNetWorth", { mode: display }),
+      t(state.language, percentileSummary ? "renterPercentileNetWorth" : "renterNetWorth", { mode: display }),
       formatMoney(finalRenter, state.language)
     ),
-    summaryItem(t(state.language, "higherFinalValue"), betterOption)
+    summaryItem(t(state.language, "higherFinalValue"), decision)
   );
 }
 
@@ -230,6 +240,31 @@ function summaryItem(label, value) {
   valueElement.textContent = value;
   item.append(labelElement, valueElement);
   return item;
+}
+
+function getPercentileSummary(projection, state, uncertain) {
+  const comparison = uncertain?.pairComparison;
+  if (!state.uncertainReturns || !comparison) {
+    return null;
+  }
+
+  const option = comparison.winner === "buy"
+    ? t(state.language, "buying")
+    : comparison.winner === "rent"
+      ? t(state.language, "renting")
+      : t(state.language, "tie");
+
+  const lastBuy = uncertain.buy.p50.at(-1);
+  const lastRent = uncertain.rent.p50.at(-1);
+
+  return {
+    buyer: applyDisplayMode(lastBuy, lastBuy.value, projection, state),
+    renter: applyDisplayMode(lastRent, lastRent.value, projection, state),
+    decision: t(state.language, "confidenceDecision", {
+      option,
+      confidence: formatFixedPercent(comparison.confidence, state.language)
+    })
+  };
 }
 
 function updateInputValue(input, value, force = false) {

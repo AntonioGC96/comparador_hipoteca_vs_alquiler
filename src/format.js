@@ -52,3 +52,13 @@ export function formatPercent(value, language = "en") {
   }
   return `${formatNumber(value, 2, language)}%`;
 }
+
+export function formatFixedPercent(value, language = "en") {
+  if (!Number.isFinite(value)) {
+    return "-";
+  }
+  return `${new Intl.NumberFormat(localeForLanguage(language), {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  }).format(value)}%`;
+}

@@ -61,6 +61,11 @@ The chart shows the 1st, 10th, 50th, 90th, and 99th percentiles. The inner
 areas. Before an option has a portfolio greater than zero, its uncertain line is
 identical to its deterministic line.
 
+The summary also compares final simulated outcomes by sorting buyer and renter
+final net worth samples independently from worst to best, pairing equal ranks,
+and counting which option wins more rank-pairs. The winning option is displayed
+with the share of paired simulations it wins as a confidence percentage.
+
 ## User Interface
 
 The desktop layout places the chart on the left and inputs on the right. Narrow
@@ -69,6 +74,10 @@ chart supports nominal and real values, with real values deflated by general
 inflation. Hovering the chart snaps to the nearest year and shows a tooltip with
 the values of every visible line at that instant. In uncertain mode, the tooltip
 labels the probability percentiles directly instead of using sigma terminology.
+Nominal projections and simulations are computed once; real values are derived
+from those nominal results at render time. Switching between nominal and real
+amounts, or switching the interface language, redraws the existing result without
+recomputing the deterministic projection or Monte Carlo simulation.
 
 All visible interface text is routed through `src/i18n.js`. The language selector
 supports English and Spanish, persists with the rest of the website state, and

@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import {
+  comparePairedOutcomes,
   computeFrenchPayment,
   computeProjection,
   computeUncertainProjection,
@@ -51,12 +52,21 @@ test("computes uncertain return percentile bands", async () => {
 
   assert.equal(uncertain.simulationCount, 80);
   assert.equal(uncertain.seed, 42);
+  assert.equal(uncertain.pairComparison.total, 80);
   assert.equal(uncertain.buy.p50.length, projection.points.length);
   assert.equal(uncertain.rent.p50.length, projection.points.length);
   assert.ok(uncertain.rent.p01.at(-1).value <= uncertain.rent.p10.at(-1).value);
   assert.ok(uncertain.rent.p10.at(-1).value <= uncertain.rent.p50.at(-1).value);
   assert.ok(uncertain.rent.p50.at(-1).value <= uncertain.rent.p90.at(-1).value);
   assert.ok(uncertain.rent.p90.at(-1).value <= uncertain.rent.p99.at(-1).value);
+});
+
+test("compares sorted paired final outcomes", () => {
+  const comparison = comparePairedOutcomes([30, 10, 20], [5, 35, 15]);
+  assert.equal(comparison.buyerWins, 2);
+  assert.equal(comparison.renterWins, 1);
+  assert.equal(comparison.winner, "buy");
+  assert.ok(Math.abs(comparison.confidence - 200 / 3) < 1e-12);
 });
 
 function completeBasicState() {

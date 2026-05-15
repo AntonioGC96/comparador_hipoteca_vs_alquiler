@@ -237,8 +237,38 @@ export async function computeUncertainProjection(projection, state, options = {}
   return {
     simulationCount,
     seed,
+    pairComparison: comparePairedOutcomes(buySamples.at(-1), rentSamples.at(-1)),
     buy: samplesToSeries(projection.points, buySamples),
     rent: samplesToSeries(projection.points, rentSamples)
+  };
+}
+
+export function comparePairedOutcomes(buyValues, rentValues) {
+  const sortedBuy = buyValues.filter(Number.isFinite).slice().sort((a, b) => a - b);
+  const sortedRent = rentValues.filter(Number.isFinite).slice().sort((a, b) => a - b);
+  const total = Math.min(sortedBuy.length, sortedRent.length);
+  let buyerWins = 0;
+  let renterWins = 0;
+  let ties = 0;
+
+  for (let index = 0; index < total; index += 1) {
+    if (sortedBuy[index] > sortedRent[index]) {
+      buyerWins += 1;
+    } else if (sortedRent[index] > sortedBuy[index]) {
+      renterWins += 1;
+    } else {
+      ties += 1;
+    }
+  }
+
+  const winningCount = Math.max(buyerWins, renterWins);
+  return {
+    total,
+    buyerWins,
+    renterWins,
+    ties,
+    winner: buyerWins > renterWins ? "buy" : renterWins > buyerWins ? "rent" : "tie",
+    confidence: total > 0 ? (winningCount / total) * 100 : 0
   };
 }
 

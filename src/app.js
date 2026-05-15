@@ -67,13 +67,18 @@ function recalculate() {
   projection = computeProjection(state);
   uncertain = null;
   syncControls(elements, state);
-  renderSummary(elements.summary, projection, state);
   render();
   scheduleUncertainProjection();
 }
 
+function refreshDisplay() {
+  syncControls(elements, state);
+  render();
+}
+
 function render() {
   elements.emptyState.hidden = projection.ready;
+  renderSummary(elements.summary, projection, state, uncertain);
   renderChart(elements.chart, projection, state, uncertain, elements.tooltip);
   elements.chart.setAttribute("aria-label", describeCurrentInputs(projection, state));
 }
@@ -106,5 +111,5 @@ function scheduleUncertainProjection() {
   }, 120);
 }
 
-bindControls(elements, () => state, setState, recalculate);
+bindControls(elements, () => state, setState, recalculate, refreshDisplay);
 recalculate();
