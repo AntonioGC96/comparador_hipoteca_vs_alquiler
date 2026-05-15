@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta
+      name="description"
+      content="A deploy-ready static frontend starter for GitHub Pages."
+    >
+    <title>Pages Launch Kit</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    >
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-header" aria-label="Site header">
+      <a class="brand" href="#main" aria-label="Pages Launch Kit home">
+        <span class="brand-mark" aria-hidden="true">P</span>
+        <span>Pages Launch Kit</span>
+      </a>
+      <nav class="nav-links" aria-label="Primary navigation">
+        <a href="#checklist">Checklist</a>
+        <a href="#preview">Preview</a>
+        <a href="#deploy">Deploy</a>
+      </nav>
+    </header>
+
+    <main id="main">
+      <section class="workspace" aria-labelledby="page-title">
+        <div class="workspace-copy">
+          <p class="eyebrow">Static frontend starter</p>
+          <h1 id="page-title">Build, polish, and publish your GitHub Pages site.</h1>
+          <p class="lede">
+            A small deploy-ready website with an interactive launch checklist,
+            responsive layout, and a Pages workflow already included.
+          </p>
+          <div class="hero-actions" aria-label="Primary actions">
+            <a class="button primary" href="#checklist">
+              <span aria-hidden="true">✓</span>
+              Start checklist
+            </a>
+            <a class="button secondary" href="#deploy">
+              <span aria-hidden="true">↗</span>
+              Deployment steps
+            </a>
+          </div>
+        </div>
+
+        <figure class="visual-panel" id="preview">
+          <img
+            src="assets/deploy-preview.png"
+            alt="Illustration of a laptop showing a web project deployment dashboard."
+          >
+          <figcaption>
+            <span class="status-dot" aria-hidden="true"></span>
+            Ready for GitHub Pages
+          </figcaption>
+        </figure>
+      </section>
+
+      <section class="launch-area" id="checklist" aria-labelledby="checklist-title">
+        <div class="section-heading">
+          <p class="eyebrow">Launch board</p>
+          <h2 id="checklist-title">Track the steps before you publish.</h2>
+        </div>
+
+        <div class="launch-grid">
+          <section class="checklist-card" aria-labelledby="tasks-title">
+            <div class="card-head">
+              <div>
+                <h3 id="tasks-title">Checklist</h3>
+                <p id="progress-copy">0 of 5 complete</p>
+              </div>
+              <button class="icon-button" type="button" id="reset-tasks" aria-label="Reset checklist">
+                ↺
+              </button>
+            </div>
+
+            <div class="progress-track" aria-hidden="true">
+              <span id="progress-bar"></span>
+            </div>
+
+            <ul class="task-list" id="task-list">
+              <li>
+                <label>
+                  <input type="checkbox" data-task="content">
+                  <span>Replace starter copy with your project details</span>
+                </label>
+              </li>
+              <li>
+                <label>
+                  <input type="checkbox" data-task="visuals">
+                  <span>Swap or keep the included visual asset</span>
+                </label>
+              </li>
+              <li>
+                <label>
+                  <input type="checkbox" data-task="responsive">
+                  <span>Test the layout on mobile and desktop widths</span>
+                </label>
+              </li>
+              <li>
+                <label>
+                  <input type="checkbox" data-task="repo">
+                  <span>Push this folder to a GitHub repository</span>
+                </label>
+              </li>
+              <li>
+                <label>
+                  <input type="checkbox" data-task="pages">
+                  <span>Enable GitHub Pages with the included workflow</span>
+                </label>
+              </li>
+            </ul>
+          </section>
+
+          <aside class="note-panel" aria-labelledby="notes-title">
+            <div class="card-head">
+              <div>
+                <h3 id="notes-title">Project notes</h3>
+                <p>Saved in this browser</p>
+              </div>
+              <button class="icon-button" type="button" id="clear-notes" aria-label="Clear notes">
+                ×
+              </button>
+            </div>
+            <textarea
+              id="notes"
+              rows="11"
+              spellcheck="true"
+              placeholder="Write launch notes, links, or content ideas..."
+            ></textarea>
+          </aside>
+        </div>
+      </section>
+
+      <section class="deploy-strip" id="deploy" aria-labelledby="deploy-title">
+        <div>
+          <p class="eyebrow">Deploy</p>
+          <h2 id="deploy-title">Publish with GitHub Pages.</h2>
+        </div>
+
+        <ol class="deploy-steps">
+          <li>
+            <span>1</span>
+            <p>Create a GitHub repository and push this folder.</p>
+          </li>
+          <li>
+            <span>2</span>
+            <p>Open repository Settings, then Pages.</p>
+          </li>
+          <li>
+            <span>3</span>
+            <p>Set the source to GitHub Actions.</p>
+          </li>
+          <li>
+            <span>4</span>
+            <p>Push to <code>main</code>; the included workflow publishes the site.</p>
+          </li>
+        </ol>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>Made for fast static hosting. Edit the files, push, and ship.</p>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
