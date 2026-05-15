@@ -9,6 +9,6 @@ test("normalizes supported languages", () => {
 
 test("translates chart labels and percentile labels", () => {
   assert.equal(t("es", "buying"), "Comprar");
-  assert.equal(percentileLabel("es", 84.1), "percentil 84,1");
-  assert.equal(percentileLabel("en", 84.1), "84.1 percentile");
+  assert.equal(percentileLabel("es", 90), "percentil 90");
+  assert.equal(percentileLabel("en", 90), "90 percentile");
 });

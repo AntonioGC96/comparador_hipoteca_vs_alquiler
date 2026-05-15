@@ -56,8 +56,8 @@ path for both renting and buying in each run. The advanced controls expose the
 simulation count and random seed so users can inspect and adjust the Monte Carlo
 defaults. Reusing the same seed keeps repeated renders stable.
 
-The chart shows the median, the 15.9th and 84.1st percentiles, and the 2.4th and
-97.6th percentiles. The inner and outer percentile regions are rendered as shaded
+The chart shows the 1st, 10th, 50th, 90th, and 99th percentiles. The inner
+10th-to-90th and outer 1st-to-99th percentile regions are rendered as shaded
 areas. Before an option has a portfolio greater than zero, its uncertain line is
 identical to its deterministic line.
 

@@ -53,8 +53,10 @@ test("computes uncertain return percentile bands", async () => {
   assert.equal(uncertain.seed, 42);
   assert.equal(uncertain.buy.p50.length, projection.points.length);
   assert.equal(uncertain.rent.p50.length, projection.points.length);
-  assert.ok(uncertain.rent.p024.at(-1).value <= uncertain.rent.p50.at(-1).value);
-  assert.ok(uncertain.rent.p50.at(-1).value <= uncertain.rent.p976.at(-1).value);
+  assert.ok(uncertain.rent.p01.at(-1).value <= uncertain.rent.p10.at(-1).value);
+  assert.ok(uncertain.rent.p10.at(-1).value <= uncertain.rent.p50.at(-1).value);
+  assert.ok(uncertain.rent.p50.at(-1).value <= uncertain.rent.p90.at(-1).value);
+  assert.ok(uncertain.rent.p90.at(-1).value <= uncertain.rent.p99.at(-1).value);
 });
 
 function completeBasicState() {

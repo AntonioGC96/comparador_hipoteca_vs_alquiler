@@ -18,7 +18,7 @@ export const ADVANCED_DEFAULTS = {
   insurance: 0.5,
   rentInflation: 3,
   returnsStdDev: 17.5,
-  monteCarloSimulations: 1000,
+  monteCarloSimulations: 10000,
   monteCarloSeed: 12345
 };
 
@@ -46,9 +46,9 @@ export const COST_FIELDS = {
 };
 
 export const PERCENTILE_LEVELS = {
-  p024: 0.024,
-  p159: 0.159,
+  p01: 0.01,
+  p10: 0.1,
   p50: 0.5,
-  p841: 0.841,
-  p976: 0.976
+  p90: 0.9,
+  p99: 0.99
 };

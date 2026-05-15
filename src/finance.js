@@ -260,11 +260,11 @@ function normalizeSeed(value) {
 
 function samplesToSeries(points, samples) {
   const series = {
-    p024: [],
-    p159: [],
+    p01: [],
+    p10: [],
     p50: [],
-    p841: [],
-    p976: []
+    p90: [],
+    p99: []
   };
 
   points.forEach((point, index) => {

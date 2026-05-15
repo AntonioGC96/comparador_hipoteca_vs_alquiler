@@ -73,7 +73,7 @@ function createDisplayValueAccessor(projection, state) {
 function collectValues(projection, uncertain, state, valueAccessor) {
   if (state.uncertainReturns && uncertain) {
     return ["buy", "rent"].flatMap((key) =>
-      ["p024", "p159", "p50", "p841", "p976"].flatMap((band) =>
+      ["p01", "p10", "p50", "p90", "p99"].flatMap((band) =>
         uncertain[key][band].map((point) => valueAccessor(point, point.value))
       )
     );
@@ -167,9 +167,9 @@ function drawGrid(svg, scale, language) {
 }
 
 function drawUncertainSeries(svg, key, series, x, y, valueAccessor) {
-  drawArea(svg, series.p024, series.p976, colors[key].outer, x, y, valueAccessor);
-  drawArea(svg, series.p159, series.p841, colors[key].inner, x, y, valueAccessor);
-  for (const band of ["p024", "p159", "p841", "p976"]) {
+  drawArea(svg, series.p01, series.p99, colors[key].outer, x, y, valueAccessor);
+  drawArea(svg, series.p10, series.p90, colors[key].inner, x, y, valueAccessor);
+  for (const band of ["p01", "p10", "p90", "p99"]) {
     drawLine(svg, series[band], key, x, y, (point) => valueAccessor(point, point.value), true);
   }
   drawLine(svg, series.p50, key, x, y, (point) => valueAccessor(point, point.value));
@@ -309,11 +309,11 @@ function drawHoverLayer(svg, tooltip, projection, state, uncertain, scale) {
 function tooltipRows(index, projection, state, uncertain, valueAccessor) {
   if (state.uncertainReturns && uncertain) {
     const bands = [
-      ["p976", percentileLabel(state.language, 97.6), false],
-      ["p841", percentileLabel(state.language, 84.1), false],
+      ["p99", percentileLabel(state.language, 99), false],
+      ["p90", percentileLabel(state.language, 90), false],
       ["p50", percentileLabel(state.language, 50), true],
-      ["p159", percentileLabel(state.language, 15.9), false],
-      ["p024", percentileLabel(state.language, 2.4), false]
+      ["p10", percentileLabel(state.language, 10), false],
+      ["p01", percentileLabel(state.language, 1), false]
     ];
     return [
       ...bands.map(([band, label, primary]) =>
