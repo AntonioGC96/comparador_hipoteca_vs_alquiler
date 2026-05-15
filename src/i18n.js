@@ -30,14 +30,14 @@ const translations = {
     resetConfirmation:
       "Return advanced options to their defaults? This will wipe out manually specified advanced data.",
     generalInflation: "General inflation",
-    homeInflation: "Home price inflation percentage",
+    homeInflation: "Home price inflation",
     mortgageAmount: "Amount of the mortgage",
     taxesHome: "Taxes over home price",
     acquisitionCostsHome: "Other acquisition costs over home price",
     maintenanceHome: "Maintenance yearly expenses over home price",
     propertyTaxHome: "Property yearly taxes over home price",
     insuranceHome: "Insurance and other yearly costs over home price",
-    rentInflation: "Rent inflation percentage",
+    rentInflation: "Rent inflation",
     rentDeposit: "Rent deposit",
     monteCarloSimulation: "Monte Carlo simulation",
     simulations: "Simulations",
@@ -93,7 +93,7 @@ const translations = {
     resetConfirmation:
       "\u00bfRestaurar las opciones avanzadas a sus valores por defecto? Esto borrar\u00e1 los datos avanzados especificados manualmente.",
     generalInflation: "Inflaci\u00f3n general",
-    homeInflation: "Porcentaje de inflaci\u00f3n del precio de la vivienda",
+    homeInflation: "Inflaci\u00f3n del precio de la vivienda",
     mortgageAmount: "Importe de la hipoteca",
     taxesHome: "Impuestos sobre el precio de la vivienda",
     acquisitionCostsHome:
@@ -104,7 +104,7 @@ const translations = {
       "Impuestos anuales de propiedad sobre el precio de la vivienda",
     insuranceHome:
       "Seguro y otros costes anuales sobre el precio de la vivienda",
-    rentInflation: "Porcentaje de inflaci\u00f3n del alquiler",
+    rentInflation: "Inflaci\u00f3n del alquiler",
     rentDeposit: "Fianza del alquiler",
     monteCarloSimulation: "Simulaci\u00f3n de Monte Carlo",
     simulations: "Simulaciones",
