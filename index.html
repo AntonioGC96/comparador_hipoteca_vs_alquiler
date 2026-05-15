@@ -3,174 +3,249 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta
-      name="description"
-      content="A deploy-ready static frontend starter for GitHub Pages."
-    >
-    <title>Pages Launch Kit</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
-      rel="stylesheet"
-    >
-    <link rel="stylesheet" href="styles.css">
+    <title>Rent vs Buy Mortgage Calculator</title>
+    <link rel="stylesheet" href="./styles.css">
   </head>
   <body>
-    <a class="skip-link" href="#main">Skip to content</a>
-
-    <header class="site-header" aria-label="Site header">
-      <a class="brand" href="#main" aria-label="Pages Launch Kit home">
-        <span class="brand-mark" aria-hidden="true">P</span>
-        <span>Pages Launch Kit</span>
-      </a>
-      <nav class="nav-links" aria-label="Primary navigation">
-        <a href="#checklist">Checklist</a>
-        <a href="#preview">Preview</a>
-        <a href="#deploy">Deploy</a>
-      </nav>
-    </header>
-
-    <main id="main">
-      <section class="workspace" aria-labelledby="page-title">
-        <div class="workspace-copy">
-          <p class="eyebrow">Static frontend starter</p>
-          <h1 id="page-title">Build, polish, and publish your GitHub Pages site.</h1>
-          <p class="lede">
-            A small deploy-ready website with an interactive launch checklist,
-            responsive layout, and a Pages workflow already included.
-          </p>
-          <div class="hero-actions" aria-label="Primary actions">
-            <a class="button primary" href="#checklist">
-              <span aria-hidden="true">✓</span>
-              Start checklist
-            </a>
-            <a class="button secondary" href="#deploy">
-              <span aria-hidden="true">↗</span>
-              Deployment steps
-            </a>
+    <main class="app-shell">
+      <section class="chart-panel" aria-labelledby="chartTitle">
+        <div class="chart-header">
+          <div>
+            <p class="eyebrow" data-i18n="chartEyebrow">Rent vs buy</p>
+            <h1 id="chartTitle" data-i18n="chartTitle">Net worth projection</h1>
+          </div>
+          <div class="segmented compact" role="group" aria-label="Amount type" data-i18n-aria-label="amountTypeAria">
+            <button type="button" data-view-mode="nominal" data-i18n="nominal" class="selected">Nominal</button>
+            <button type="button" data-view-mode="real" data-i18n="real">Real</button>
           </div>
         </div>
 
-        <figure class="visual-panel" id="preview">
-          <img
-            src="assets/deploy-preview.png"
-            alt="Illustration of a laptop showing a web project deployment dashboard."
-          >
-          <figcaption>
-            <span class="status-dot" aria-hidden="true"></span>
-            Ready for GitHub Pages
-          </figcaption>
-        </figure>
+        <div id="summary" class="summary-strip" aria-live="polite"></div>
+
+        <div class="chart-frame">
+          <svg id="netWorthChart" role="img" aria-labelledby="chartTitle chartDescription"></svg>
+          <p id="chartDescription" class="sr-only" data-i18n="chartDescription">Line chart comparing buyer and renter net worth over time.</p>
+          <div id="chartTooltip" class="chart-tooltip" hidden></div>
+          <div id="emptyState" class="empty-state">
+            <strong data-i18n="emptyState">Enter the basic options to compute the projection.</strong>
+          </div>
+          <div id="chartLoading" class="chart-loading" hidden>
+            <span class="spinner" aria-hidden="true"></span>
+            <span data-i18n="loadingReturns">Computing returns distribution simulation</span>
+          </div>
+        </div>
       </section>
 
-      <section class="launch-area" id="checklist" aria-labelledby="checklist-title">
-        <div class="section-heading">
-          <p class="eyebrow">Launch board</p>
-          <h2 id="checklist-title">Track the steps before you publish.</h2>
-        </div>
+      <aside class="controls-panel" aria-labelledby="controlsTitle">
+        <form id="calculatorForm" novalidate>
+          <div class="controls-heading">
+            <div>
+              <p class="eyebrow" data-i18n="controlsEyebrow">Inputs</p>
+              <h2 id="controlsTitle" data-i18n="controlsTitle">Mortgage decision</h2>
+            </div>
+            <label class="language-field">
+              <span data-i18n="language">Language</span>
+              <select id="languageSelect">
+                <option value="en">English</option>
+                <option value="es">Espa&ntilde;ol</option>
+              </select>
+            </label>
+          </div>
 
-        <div class="launch-grid">
-          <section class="checklist-card" aria-labelledby="tasks-title">
-            <div class="card-head">
-              <div>
-                <h3 id="tasks-title">Checklist</h3>
-                <p id="progress-copy">0 of 5 complete</p>
+          <div class="field-grid">
+            <label class="field">
+              <span data-i18n="homePrice">Home price</span>
+              <div class="input-shell">
+                <input id="homePrice" name="homePrice" data-basic-field="homePrice" type="number" min="0" step="0.01" inputmode="decimal" required>
+                <span>EUR</span>
               </div>
-              <button class="icon-button" type="button" id="reset-tasks" aria-label="Reset checklist">
-                ↺
-              </button>
+            </label>
+
+            <label class="field">
+              <span data-i18n="mortgageTae">Mortgage TAE interest rate</span>
+              <div class="input-shell">
+                <input id="mortgageRate" name="mortgageRate" data-basic-field="mortgageRate" type="number" min="0" step="0.01" inputmode="decimal" required>
+                <span>%</span>
+              </div>
+            </label>
+
+            <label class="field">
+              <span data-i18n="mortgageYears">Mortgage years</span>
+              <div class="input-shell">
+                <input id="mortgageYears" name="mortgageYears" data-basic-field="mortgageYears" type="number" min="1" step="1" inputmode="numeric" required>
+                <span data-i18n="yearsUnit">years</span>
+              </div>
+            </label>
+
+            <label class="field">
+              <span data-i18n="monthlyRent">Monthly rent</span>
+              <div class="input-shell">
+                <input id="monthlyRent" name="monthlyRent" data-basic-field="monthlyRent" type="number" min="0" step="0.01" inputmode="decimal" required>
+                <span>EUR</span>
+              </div>
+            </label>
+
+            <div class="field investment-field">
+              <label for="investmentReturn" data-i18n="investmentReturns">Investment returns</label>
+              <div class="input-shell">
+                <input id="investmentReturn" name="investmentReturn" data-basic-field="investmentReturn" type="number" step="0.01" inputmode="decimal" required>
+                <span>% log</span>
+              </div>
+              <div id="uncertainControls" class="uncertain-controls" hidden>
+                <label class="checkbox-field">
+                  <input id="uncertainReturns" type="checkbox">
+                  <span data-i18n="uncertainReturns">Switch to uncertain portfolio returns</span>
+                </label>
+                <label id="stdDevField" class="field inline-field" hidden>
+                  <span data-i18n="returnsStdDev">Returns standard deviation</span>
+                  <div class="input-shell">
+                    <input id="returnsStdDev" data-advanced-field="returnsStdDev" type="number" min="0" step="0.01" inputmode="decimal">
+                    <span>%</span>
+                  </div>
+                </label>
+              </div>
             </div>
 
-            <div class="progress-track" aria-hidden="true">
-              <span id="progress-bar"></span>
+            <div class="field">
+              <span data-i18n="buildingType">New building or resale</span>
+              <div class="segmented" role="group" aria-label="New building or resale" data-i18n-aria-label="buildingType">
+                <button type="button" data-building-type="new" data-i18n="newBuilding" class="selected">New building</button>
+                <button type="button" data-building-type="resale" data-i18n="resale">Resale</button>
+              </div>
             </div>
+          </div>
 
-            <ul class="task-list" id="task-list">
-              <li>
-                <label>
-                  <input type="checkbox" data-task="content">
-                  <span>Replace starter copy with your project details</span>
+          <button id="advancedToggle" class="advanced-toggle" type="button" data-i18n="advancedOptions">Advanced options</button>
+
+          <section id="advancedRegion" class="advanced-region" aria-label="Advanced options" data-i18n-aria-label="advancedOptions" hidden>
+            <div class="field-grid">
+              <label class="field">
+                <span data-i18n="generalInflation">General inflation</span>
+                <div class="input-shell">
+                  <input data-advanced-field="generalInflation" type="number" step="0.01" inputmode="decimal">
+                  <span>%</span>
+                </div>
+              </label>
+
+              <label class="field">
+                <span data-i18n="homeInflation">Home price inflation percentage</span>
+                <div class="input-shell">
+                  <input data-advanced-field="homeInflation" type="number" step="0.01" inputmode="decimal">
+                  <span>%</span>
+                </div>
+              </label>
+
+              <label class="field">
+                <span data-i18n="mortgageAmount">Amount of the mortgage</span>
+                <div class="input-shell">
+                  <input data-advanced-field="mortgagePercent" type="number" min="0" max="100" step="0.01" inputmode="decimal">
+                  <span>%</span>
+                </div>
+              </label>
+
+              <label class="field">
+                <span data-i18n="taxesHome">Taxes over home price</span>
+                <div class="input-shell">
+                  <input data-advanced-field="taxes" type="number" min="0" step="0.01" inputmode="decimal">
+                  <span>%</span>
+                </div>
+              </label>
+
+              <div class="field dual-field" data-dual-field="acquisitionCosts">
+                <span data-i18n="acquisitionCostsHome">Other acquisition costs over home price</span>
+                <div class="split-input">
+                  <label data-dual-side="percent">
+                    <span>%</span>
+                    <input type="number" min="0" step="0.01" inputmode="decimal">
+                  </label>
+                  <label data-dual-side="amount">
+                    <span>EUR</span>
+                    <input type="number" min="0" step="0.01" inputmode="decimal">
+                  </label>
+                </div>
+              </div>
+
+              <div class="field dual-field" data-dual-field="maintenance">
+                <span data-i18n="maintenanceHome">Maintenance yearly expenses over home price</span>
+                <div class="split-input">
+                  <label data-dual-side="percent">
+                    <span>%</span>
+                    <input type="number" min="0" step="0.01" inputmode="decimal">
+                  </label>
+                  <label data-dual-side="amount">
+                    <span>EUR</span>
+                    <input type="number" min="0" step="0.01" inputmode="decimal">
+                  </label>
+                </div>
+              </div>
+
+              <div class="field dual-field" data-dual-field="propertyTax">
+                <span data-i18n="propertyTaxHome">Property yearly taxes over home price</span>
+                <div class="split-input">
+                  <label data-dual-side="percent">
+                    <span>%</span>
+                    <input type="number" min="0" step="0.01" inputmode="decimal">
+                  </label>
+                  <label data-dual-side="amount">
+                    <span>EUR</span>
+                    <input type="number" min="0" step="0.01" inputmode="decimal">
+                  </label>
+                </div>
+              </div>
+
+              <div class="field dual-field" data-dual-field="insurance">
+                <span data-i18n="insuranceHome">Insurance and other yearly costs over home price</span>
+                <div class="split-input">
+                  <label data-dual-side="percent">
+                    <span>%</span>
+                    <input type="number" min="0" step="0.01" inputmode="decimal">
+                  </label>
+                  <label data-dual-side="amount">
+                    <span>EUR</span>
+                    <input type="number" min="0" step="0.01" inputmode="decimal">
+                  </label>
+                </div>
+              </div>
+
+              <label class="field">
+                <span data-i18n="rentInflation">Rent inflation percentage</span>
+                <div class="input-shell">
+                  <input data-advanced-field="rentInflation" type="number" step="0.01" inputmode="decimal">
+                  <span>%</span>
+                </div>
+              </label>
+
+              <label class="field">
+                <span data-i18n="rentDeposit">Rent deposit</span>
+                <div class="input-shell">
+                  <input data-advanced-field="rentDeposit" type="number" min="0" step="0.01" inputmode="decimal">
+                  <span>EUR</span>
+                </div>
+              </label>
+
+              <div id="monteCarloFields" class="field-group" hidden>
+                <div class="field-group-heading" data-i18n="monteCarloSimulation">Monte Carlo simulation</div>
+                <label class="field">
+                  <span data-i18n="simulations">Simulations</span>
+                  <div class="input-shell">
+                    <input data-advanced-field="monteCarloSimulations" type="number" min="50" max="10000" step="50" inputmode="numeric">
+                    <span data-i18n="runsUnit">runs</span>
+                  </div>
                 </label>
-              </li>
-              <li>
-                <label>
-                  <input type="checkbox" data-task="visuals">
-                  <span>Swap or keep the included visual asset</span>
+                <label class="field">
+                  <span data-i18n="randomSeed">Random seed</span>
+                  <div class="input-shell">
+                    <input data-advanced-field="monteCarloSeed" type="number" min="0" step="1" inputmode="numeric">
+                    <span data-i18n="seedUnit">seed</span>
+                  </div>
                 </label>
-              </li>
-              <li>
-                <label>
-                  <input type="checkbox" data-task="responsive">
-                  <span>Test the layout on mobile and desktop widths</span>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="checkbox" data-task="repo">
-                  <span>Push this folder to a GitHub repository</span>
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="checkbox" data-task="pages">
-                  <span>Enable GitHub Pages with the included workflow</span>
-                </label>
-              </li>
-            </ul>
+              </div>
+            </div>
           </section>
-
-          <aside class="note-panel" aria-labelledby="notes-title">
-            <div class="card-head">
-              <div>
-                <h3 id="notes-title">Project notes</h3>
-                <p>Saved in this browser</p>
-              </div>
-              <button class="icon-button" type="button" id="clear-notes" aria-label="Clear notes">
-                ×
-              </button>
-            </div>
-            <textarea
-              id="notes"
-              rows="11"
-              spellcheck="true"
-              placeholder="Write launch notes, links, or content ideas..."
-            ></textarea>
-          </aside>
-        </div>
-      </section>
-
-      <section class="deploy-strip" id="deploy" aria-labelledby="deploy-title">
-        <div>
-          <p class="eyebrow">Deploy</p>
-          <h2 id="deploy-title">Publish with GitHub Pages.</h2>
-        </div>
-
-        <ol class="deploy-steps">
-          <li>
-            <span>1</span>
-            <p>Create a GitHub repository and push this folder.</p>
-          </li>
-          <li>
-            <span>2</span>
-            <p>Open repository Settings, then Pages.</p>
-          </li>
-          <li>
-            <span>3</span>
-            <p>Set the source to GitHub Actions.</p>
-          </li>
-          <li>
-            <span>4</span>
-            <p>Push to <code>main</code>; the included workflow publishes the site.</p>
-          </li>
-        </ol>
-      </section>
+        </form>
+      </aside>
     </main>
 
-    <footer class="site-footer">
-      <p>Made for fast static hosting. Edit the files, push, and ship.</p>
-    </footer>
-
-    <script src="script.js"></script>
+    <script type="module" src="./src/app.js"></script>
   </body>
 </html>

@@ -1,0 +1,11 @@
+{
+  "name": "rent-vs-buy-mortgage-calculator",
+  "version": "1.0.0",
+  "description": "A browser tool for comparing renting with buying a home using a fixed-rate mortgage.",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "start": "node server.mjs",
+    "test": "node --test"
+  }
+}

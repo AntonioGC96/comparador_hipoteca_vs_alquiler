@@ -1,0 +1,11 @@
+{
+  "name": "Rent vs Buy Calculator",
+  "image": "node:22-alpine",
+  "forwardPorts": [4173],
+  "postCreateCommand": "npm test",
+  "customizations": {
+    "vscode": {
+      "extensions": []
+    }
+  }
+}
